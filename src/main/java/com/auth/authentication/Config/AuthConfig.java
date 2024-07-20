@@ -18,21 +18,21 @@ public class AuthConfig {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                        .csrf(AbstractHttpConfigurer::disable)
-                        .authorizeHttpRequests( auth ->
-                                auth
-                                        .requestMatchers("/api/auth/**")
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated()
-
-                        )
-                .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/auth/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-                return http.build();
+        return http.build();
     }
 }
